@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController()
-@RequestMapping("/api/vi/products")
+@RequestMapping("/products")
 public class ProductController {
  private ProductService productService;
 
@@ -26,10 +26,8 @@ public class ProductController {
     @DeleteMapping("{id}")
     public void deleteProductById(){}
     @PostMapping
-    public String createProduct(@RequestBody GenericProductDto product){
-//     return productService.createProduct(product);
-       System.out.println(product);
-       return  "shubham"+product.getTitle();
+    public GenericProductDto createProduct(@RequestBody GenericProductDto product){
+     return productService.createProduct(product);
     }
     @PutMapping("{id}")
     public void updateProductById(){}
