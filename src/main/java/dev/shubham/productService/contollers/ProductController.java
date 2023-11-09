@@ -5,6 +5,7 @@ import dev.shubham.productService.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController()
@@ -17,14 +18,18 @@ public class ProductController {
     this.productService=productService;
  }
 
-   @GetMapping
-    public void getAllProducts(){}
+    @GetMapping
+    public List<GenericProductDto> getAllProducts() {
+    return productService.getProducts();
+   }
     @GetMapping("{id}")
     public GenericProductDto getProductById(@PathVariable("id") Long id){
        return productService.getProductById(id);
     }
     @DeleteMapping("{id}")
-    public void deleteProductById(){}
+    public void deleteProductById(@PathVariable("id")Long id){
+      productService.deleteProduct(id);
+    }
     @PostMapping
     public GenericProductDto createProduct(@RequestBody GenericProductDto product){
      return productService.createProduct(product);
