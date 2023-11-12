@@ -1,12 +1,16 @@
 package dev.shubham.productService.services;
 
 
+import dev.shubham.productService.Exceptions.NotFoundException;
+import dev.shubham.productService.dtos.ExceptionDto;
 import dev.shubham.productService.dtos.FakeStoreProductDto;
 import dev.shubham.productService.dtos.GenericProductDto;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
@@ -46,12 +50,27 @@ public class FakeStoreProductService implements  ProductService {
       ResponseEntity<GenericProductDto> response=restTemplate.postForEntity(createPostRequestUrl,product,GenericProductDto.class);
       return  response.getBody();
     }
-    public GenericProductDto getProductById(Long id)
-    {
-        RestTemplate restTemplate=restTemplateBuilder.build();
-        ResponseEntity<FakeStoreProductDto> response=restTemplate.getForEntity(specificProductRequestUrl, FakeStoreProductDto.class,id);
-          FakeStoreProductDto fakeStoreProductDto=response.getBody();
-          return convertFakeStoreProductIntoGenericProduct(fakeStoreProductDto);
+
+    @Override
+    public GenericProductDto getProductById(Long id) throws NotFoundException {
+//        FakeStoreProductService fakeStoreProductService = new FakeStoreProductService();
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        ResponseEntity<FakeStoreProductDto> response =
+                restTemplate.getForEntity(specificProductRequestUrl, FakeStoreProductDto.class, id);
+        System.out.println("------>>>response "+response);
+
+
+        FakeStoreProductDto fakeStoreProductDto = response.getBody();
+        System.out.println("------>>>fakeStoreProductDto "+fakeStoreProductDto);
+
+        if (fakeStoreProductDto == null) {
+            throw new NotFoundException("Product with id: " + id + " doesn't exist.");
+        }
+
+//        response.getStatusCode()
+
+        return convertFakeStoreProductIntoGenericProduct(fakeStoreProductDto);
+//        return null;
     }
 
   @Override
@@ -78,6 +97,5 @@ public class FakeStoreProductService implements  ProductService {
      return response.getBody();
 
     }
-
 
 }
