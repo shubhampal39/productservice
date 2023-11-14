@@ -16,14 +16,14 @@ import java.util.UUID;
 public class ProductController {
  private ProductService productService;
 
- public ProductController(@Qualifier("fakeStoreProductService") ProductService productService)
+ public ProductController(ProductService productService)
  {
     this.productService=productService;
  }
 
     @GetMapping
     public List<GenericProductDto> getAllProducts() {
-    return productService.getProducts();
+    return productService.getAllProducts();
    }
     @GetMapping("{id}")
     public GenericProductDto getProductById(@PathVariable("id") Long id) throws NotFoundException {

@@ -1,4 +1,4 @@
-package dev.shubham.productService.dtos;
+package dev.shubham.productService.thirdpartyclients.productService.fakestore;
 
 import dev.shubham.productService.models.Category;
 import lombok.Getter;
